@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   
   _checktable() async{
-    return database.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='test';");
+    return database.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='transaction';");
   }
 
 
