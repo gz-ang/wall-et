@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Transaction {
   final amount;
   final type;
@@ -14,4 +16,15 @@ class Transaction {
     note: data["note"],
     category: data["category"]
   );
+}
+
+class TransactionRepo with ChangeNotifier {
+  List<Transaction> txnList = new List<Transaction>();
+
+  fromDatabase( Iterable data ) {
+    data.forEach((element) {
+      txnList.add(Transaction().fromDatabase(element));
+    });
+  }
+
 }

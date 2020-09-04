@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:wallet/pages/splash.dart';
+
+import 'model/database.dart';
+import 'model/transaction.dart';
+import 'model/wallet.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,55 +15,62 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<WalletRepo>(create: (context) => WalletRepo()),
+        ChangeNotifierProvider<TransactionRepo>(create: (context) => TransactionRepo()),
+        ChangeNotifierProvider<LocalDatabase>(create: (context) => LocalDatabase())
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: Splash(),
       ),
-      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   Database database;
-  
-  _rundb() async{
+
+  _rundb() async {
     var databasesPath = await getDatabasesPath();
-    String path = databasesPath+"/my_db.db";
+    String path = databasesPath + "/my_db.db";
     return await openDatabase(path, version: 1);
   }
 
-  _createTable() async{
-    return database.execute("CREATE TABLE `transaction` (id INTEGER primary key, amount real, type text, `date` numeric, note text, category text)");
+  _createTable() async {
+    return database.execute(
+        "CREATE TABLE `transaction` (id INTEGER primary key, amount real, type text, `date` numeric, note text, category text)");
   }
 
-  _sqlSelect() async{
+  _sqlSelect() async {
     return database.query("`transaction`");
   }
 
-  _sqlInsert() async{
-    return database.rawInsert("insert into `transaction` (amount, type, `date`, note, category) VALUES (?,?,?,?,?)", [1.50, 'credit', "2020-09-03 13:00:10", 'lunch', "food"]);
+  _sqlInsert() async {
+    return database.rawInsert(
+        "insert into `transaction` (amount, type, `date`, note, category) VALUES (?,?,?,?,?)",
+        [1.50, 'credit', "2020-09-03 13:00:10", 'lunch', "food"]);
 //    database.execute("INSERT INTO test (name, value, num) VALUES ('some name', 1234, 12.34)");
   }
 
-  _sqlUpdate() async{
+  _sqlUpdate() async {
     String col1 = "type";
     String col2 = "id";
-    return database.rawUpdate("UPDATE `transaction` SET $col1=? WHERE $col2=?", ["credit", 1]);
+    return database.rawUpdate(
+        "UPDATE `transaction` SET $col1=? WHERE $col2=?", ["credit", 1]);
 //    database.execute("UPDATE test SET name='my_name' WHERE ID = 1");
   }
 
-  _sqlDelete() async{
+  _sqlDelete() async {
     return database.rawDelete("DELETE FROM test WHERE name=?", ["agz"]);
 //    database.execute("DELETE FROM test WHERE ID = 2");
   }
@@ -66,31 +79,27 @@ class _MyHomePageState extends State<MyHomePage> {
     return database.execute("DROP TABLE test");
   }
 
-  _closedb() async{
+  _closedb() async {
     var databasesPath = await getDatabasesPath();
-    String path = databasesPath+"/my_db.db";
+    String path = databasesPath + "/my_db.db";
     return await deleteDatabase(path);
   }
-  
-  _checktable() async{
-    return database.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='transaction';");
+
+  _checktable() async {
+    return database.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='transaction';");
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     print(database);
     return Scaffold(
-      appBar: AppBar(
-      ),
+      appBar: AppBar(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           DateTime dt = new DateTime.now();
           print(dt);
-          setState(() {
-
-          });
+          setState(() {});
           print("database: $database");
           await database.getVersion().then((value) => print("version: $value"));
           print("path: ${database.path}");

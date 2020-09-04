@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Wallet {
   final name;
   var balance;
@@ -8,4 +10,15 @@ class Wallet {
     name: data["name"],
     balance: data["balance"]
   );
+}
+
+class WalletRepo with ChangeNotifier {
+  List<Wallet> walletList = new List<Wallet>();
+
+  fromDatabase( Iterable data ) {
+    data.forEach((element) {
+      walletList.add(Wallet().fromDatabase(element));
+    });
+  }
+
 }
