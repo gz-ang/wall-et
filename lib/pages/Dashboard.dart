@@ -23,14 +23,47 @@ class DashboardState extends State<Dashboard> {
   TransactionRepo tBloc = widget.transaction;
   LocalDatabase dBloc = widget.database;
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        child: Column(
+      appBar: AppBar(
+        title: (wBloc.currentWallet.name.isEmpty)?
+        Row(
           children: [
-
+            Text("No wallet"),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                //TODO: add page/alert box to key in wallet details
+              },
+            )
           ],
+        )
+            :Column(
+          children: [
+            //TODO: edit wallet balance
+          Text("${wBloc.currentWallet.name}"),
+          Text("${wBloc.currentWallet.balance}")
+        ],
         ),
       ),
+      body: Container(
+        child: Column(
+          children: (tBloc.txnList.isEmpty)
+              ?Text("No transaction history")
+                :_build(tBloc),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          //TODO: add transaction
+        },
+      ),
     );
+  }
+
+  List<Widget> _build(TransactionRepo tBloc) {
+    return List.generate(tBloc.txnList.length, (index) {
+      //TODO: What to display
+      return ListTile();
+    });
   }
 }

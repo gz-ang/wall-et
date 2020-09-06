@@ -14,6 +14,7 @@ class Wallet {
 
 class WalletRepo with ChangeNotifier {
   List<Wallet> walletList = new List<Wallet>();
+  Wallet currentWallet = new Wallet();
 
   fromDatabase( Iterable data ) {
     data.forEach((element) {

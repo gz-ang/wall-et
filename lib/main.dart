@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:wallet/pages/splash.dart';
@@ -98,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           DateTime dt = new DateTime.now();
-          print(dt);
+          var dtf = DateFormat("yyyy-MM-dd kk:mm:ss");
+          print(dtf);
           setState(() {});
           print("database: $database");
           await database.getVersion().then((value) => print("version: $value"));

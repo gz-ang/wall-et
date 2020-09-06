@@ -5,6 +5,7 @@ import 'package:wallet/model/database.dart';
 import 'package:wallet/model/transaction.dart';
 import 'package:wallet/model/wallet.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/pages/Dashboard.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ class SplashState extends State<Splash> {
               return FutureBuilder(
                 future: initCheckTable(database),
                 builder: (_, r) {
-                  if (s.connectionState == ConnectionState.done) {
+                  if (r.connectionState == ConnectionState.done) {
                     return FutureBuilder(
                       future: getData(database),
                       builder: (_, q) {
@@ -41,9 +42,11 @@ class SplashState extends State<Splash> {
                           print("database: ${dBloc.database}");
                           print("wallet: ${wBloc.walletList}");
                           print("transaction: ${tBloc.txnList}");
+                          Future.delayed(Duration(seconds: 2), () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Dashboard())));
 
                         } else {
                           print("no data inserted yet");
+                          Future.delayed(Duration(seconds: 2), () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Dashboard())));
                         }
                         return Container(
                           child: Center(

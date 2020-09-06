@@ -14,12 +14,12 @@ initCheckTable(Database database) async{
 
   if(wlt.isEmpty) {
     print("Creating table: wallet");
-    await database.execute("CREATE TABLE `walllet` (`id` INTEGER PRIMARY KEY, `name` TEXT, `balance` REAL)");
+    await database.execute("CREATE TABLE `wallet` (`id` INTEGER PRIMARY KEY, `name` TEXT, `balance` REAL)");
   }
 
   if (txn.isEmpty) {
     print("Creating table: transaction");
-    await database.execute("CREATE TABLE `transaction` (`id` INTEGER PRIMARY KEY, `amount` REAL, `type` TEXT, `date` NUMERIC, `note` TEXT, `category` TEXT)");
+    await database.execute("CREATE TABLE `transaction` (`id` INTEGER PRIMARY KEY, `amount` REAL, `type` TEXT, `date` NUMERIC, `note` TEXT, `category` TEXT, `wallet` TEXT)");
   }
 }
 
@@ -29,5 +29,33 @@ getData(Database database) async{
 
   return [wlt, txn];
 }
+
+createWallet(Database database, String name, double balance) async{
+  return database.rawInsert(
+      "INSERT INTO `wallet` (name, balance) VALUES (?,?)",
+      [name, balance]);
+}
+
+updateWallet(Database database) async{
+
+}
+
+deleteWallet(Database database) async{
+
+}
+
+addTransaction(Database database) async{
+
+}
+
+editTransaction(Database database) async{
+
+}
+
+deleteTransaction(Database database) async{
+
+}
+
+
 
 
