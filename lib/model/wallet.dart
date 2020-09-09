@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
 class Wallet {
+  final id;
   var name;
   var balance;
 
-  Wallet({this.name, this.balance}):super();
+  Wallet({this.id, this.name, this.balance}):super();
 
   Wallet fromDatabase( data ) => new Wallet(
+        id: data["id"],
         name: data["name"],
         balance: (data["balance"] is num)?data["balance"]:double.parse(data["balance"])
     );

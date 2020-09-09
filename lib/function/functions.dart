@@ -19,7 +19,7 @@ initCheckTable(Database database) async{
 
   if (txn.isEmpty) {
     print("Creating table: transaction");
-    await database.execute("CREATE TABLE `transaction` (`id` INTEGER PRIMARY KEY, `amount` REAL, `type` TEXT, `date` NUMERIC, `note` TEXT, `category` TEXT, `wallet` TEXT)");
+    await database.execute("CREATE TABLE `transaction` (`id` INTEGER PRIMARY KEY, `amount` REAL, `type` TEXT, `date` NUMERIC, `note` TEXT, `category` TEXT, `walletid` REAL)");
   }
   return [wlt, txn];
 }
@@ -43,9 +43,7 @@ createWallet(Database database, String name, double balance) async{
 
 updateWallet(Database database, walletName, walletAmount) async{
   var wlt = await database.rawUpdate("UPDATE `wallet` SET `name`=?, `balance`=? WHERE `name`=$walletName", [walletName, walletAmount]);
-  //TODO: update for transactions if transaction exist
-  //TODO: Alternative, change col in transaction into id
-
+  return wlt;
 }
 
 deleteWallet(Database database, walletName) async{
@@ -53,16 +51,18 @@ deleteWallet(Database database, walletName) async{
   //TODO: logic, delete transaction associated with this wallet
 }
 
-addTransaction(Database database) async{
-
+addTransaction(Database database, amount, type, date, note, category, walletid) async{
+  return database.rawInsert(
+      "INSERT INTO `transaction` (amount, type, date, note, category, walletid) VALUES (?,?,?,?,?,?)",
+      [amount, type, date, note, category, walletid]);
 }
 
-editTransaction(Database database) async{
-
+editTransaction(Database database, tid, amount, type, date, note, category, walletid) async{
+  return database.rawUpdate("UPDATE `transaction` SET `amount`=?, `type`=?, `date`=?, `note`=?, `category`=?, `walletid`=? WHERE `id`=$tid", [amount, type, date, note, category, walletid]);
 }
 
-deleteTransaction(Database database) async{
-
+deleteTransaction(Database database, tid) async{
+  return database.rawDelete("DELETE FROM `transaction` WHERE `id` = ?", [tid]);
 }
 
 

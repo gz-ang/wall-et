@@ -1,20 +1,24 @@
 import 'package:flutter/cupertino.dart';
 
 class Transaction {
-  final amount;
-  final type;
-  final date;
-  final note;
-  final category;
+  final id;
+  var amount;
+  var type;
+  var date;
+  var note;
+  var category;
+  var wid;
 
-  Transaction({this.amount, this.type, this.date, this.note, this.category}):super();
+  Transaction({this.id, this.amount, this.type, this.date, this.note, this.category, this.wid}):super();
 
   Transaction fromDatabase( data ) => new Transaction(
+    id: data["id"],
     amount: data["amount"],
     type: data["type"],
     date: data["date"],
     note: data["note"],
-    category: data["category"]
+    category: data["category"],
+    wid: data["walletid"]
   );
 }
 
